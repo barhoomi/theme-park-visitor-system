@@ -1,8 +1,8 @@
 
 public class rgnInfo {
-	int region;
-	int total_visitors;
-	visitorType vtype[];
+	private int region;
+	private int total_visitors;
+	private visitorType vtype[];
 	
 	public rgnInfo(int r, int t, visitorType [] vt) {
 		region = r;
