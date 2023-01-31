@@ -50,7 +50,17 @@ public class visitorInfo {
 		order.push(c);
 		order.push(d);
 	}
-	
-	 
+
+	visitorInfo(String[] info){
+		fName = info[0];
+		lName = info[1];
+		region = Integer.parseInt(info[2]);
+		phone = info[3];
+		type = Integer.parseInt(info[4]);
+		order = new ArrayStack<>(info.length - 5);
+		for(int i = 5; i< info.length; i++){
+			order.push(Integer.parseInt(info[i]));
+		}
+	}
 	
 }

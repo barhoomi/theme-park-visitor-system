@@ -1,31 +1,35 @@
+import java.io.*;
 
 public class ThemeParkADT {
-	public class ThemeParkADT {
 	private rgnInfo regionArray[];
-	private final int k = 100;
 	private rgnInfo rgnSortedArray[];
 	private int r;
 	private LinkedList<visitorInfo> visitors;
 	private LinkedList<visitorInfo> vips;
 
-	public void readFileAndAnalyse(String f) throws IOException, ClassNotFoundException {
-		regionArray = new rgnInfo[k];
-		rgnSortedArray = new rgnInfo[k];
-		vips = new LinkedList<visitorInfo>();
-		visitors = new LinkedList<visitorInfo>();
-		File inFile = new File(f);
-		FileInputStream inFileStream = new FileInputStream(inFile);
-		ObjectInputStream inObjectStream = new ObjectInputStream(inFileStream);
-		visitorInfo v;
-		while (true) {
-			v = (visitorInfo) inObjectStream.readObject();
-			visitors.insert(v);
-			if (v.type == 0) {
-				vips.insert(v);
-				regionArray[v.region].vtype[0].visitList.insert(v);
-			} else
-				regionArray[v.region].vtype[1].visitList.insert(v);
+	public static void readFileAndAnalyse(String f) throws IOException, ClassNotFoundException {
+		LinkedList<visitorInfo> vips = new LinkedList<visitorInfo>();
+		LinkedList<visitorInfo> visitors = new LinkedList<visitorInfo>();
+
+		File inF = new File(f);
+		FileReader FR = new FileReader(inF);
+		BufferedReader BFR = new BufferedReader(FR);
+
+		try {
+			String currentLine = "";
+			while (true) {
+				currentLine = BFR.readLine();
+				String[] info = currentLine.split(",");
+				visitorInfo visitor = new visitorInfo(info);
+				System.out.println(visitor);
+			}
 		}
+		catch(Exception e){
+			System.out.println("end of file reached");
+		}
+
+		BFR.close();
+		FR.close();
 	}
 	
 	public void searchVISITOR(String lName){
@@ -44,8 +48,8 @@ public class ThemeParkADT {
 		
 	}
 	
-	public boolean checkRegLoc(inr r,String n1,String n2,boolean flag) {
-		
+	public boolean checkRegLoc(int r,String n1,String n2,boolean flag) {
+		return false;
 	}
 	
 }
