@@ -99,24 +99,79 @@ public class ThemeParkADT {
         return r;
     }
 
-    public void searchVISITOR(String lName) {
-
+   public void searchVISITOR(String lNamee) {
+    	int c=0;
+    	while(!visitors.last()) {
+    		visitors.findfirst();
+    		visitorInfo temp = visitors.retrieve();
+    		if(temp.lName.equalsIgnoreCase(lNamee))
+    			printVisData(++c, temp);
+    		visitors.findnext();
+    	}
+    }
+    
+    private void printVisData(int n,visitorInfo v) {
+    	System.out.println("Visitor "+n+":");
+    	System.out.println("Name: "+v.fName+v.lName);
+    	System.out.println("Rwgion: "+v.region);
+    	String s;
+    	if(v.type==1)
+    		s="Yes";
+    	else
+    		s="No";
+    	System.out.println("VIP Pass holder: "+s);
+    	System.out.println("Phone number: "+v.phone);
+    	
+    	System.out.print("Order of visiting the kingdoms: ");
+    	printStack(v.order);
+    		
+    }
+    
+    private void printStack (ArrayStack<Integer> st) {
+    	if (st.empty ())
+    		return ;
+    	Integer top = st.pop () ;
+    	System.out.println(top);
+    	printStack (st);
+    	st.push (top);
+    	return ;
     }
 
+
+    public void rgnCount() {
+    	System.out.println("The total number of regions are "+r);
+    }
+    
     public void popularRgn() {
-
+    	for(int i =0;i<rgnSortedArray.length;i++) {
+    		System.out.println("Region "+rgnSortedArray[i].region+": "+rgnSortedArray[i].total_visitors);
+    	}
     }
 
-    public void vipRgn(int i) {
-
+    public void vipRgn(int r) {
+    	for(int i =0;i<regionArray.length;i++) {
+    		if(regionArray[i].region==r)
+    			System.out.println("The total number of VIP pass holders coming from Region "+r+" is "+regionArray[i].vtype[0].num_visitors);
+    	}
     }
 
     public void vipLication() {
-
+    	while(!vips.last()) {
+    		vips.findfirst();
+    		visitorInfo temp = vips.retrieve();
+    		Integer x = temp.order.pop();
+    		System.out.println(temp.fName+" "+temp.lName+" in Kingdom "+x);
+    		temp.order.push(x);
+    		vips.findnext();
+    	}
+    }
+    
+    public boolean checkVipLoc(String n1,String n2, boolean flag) {
+    	return false;
     }
 
     public boolean checkRegLoc(int r, String n1, String n2, boolean flag) {
         return false;
     }
-
+	
 }
