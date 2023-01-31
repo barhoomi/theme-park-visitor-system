@@ -11,4 +11,10 @@ public class visitorType {
 		this.visitList = visitList;
 	}
 
+	public visitorType(int type){
+
+	}
+
+
+
 }
