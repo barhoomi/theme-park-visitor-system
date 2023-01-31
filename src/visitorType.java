@@ -1,8 +1,8 @@
 
 public class visitorType {
-	int type;
-	int num_visitors;
-	LinkedList<visitorInfo> visitList;
+	private int type;
+	private int num_visitors;
+	private LinkedList<visitorInfo> visitList;
 
 	public visitorType(int type, int num_visitors, LinkedList<visitorInfo> visitList) {
 		super();
