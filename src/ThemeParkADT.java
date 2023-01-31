@@ -36,9 +36,11 @@ public class ThemeParkADT {
 							}
 							regionArray[b].region=temp.region;
 							if(temp.type==1) {
+								regionArray[b].vtype[0].type=1;
 								regionArray[b].vtype[0].visitList.insert(temp);}
-							else 
-								regionArray[b].vtype[1].visitList.insert(temp);
+							else {
+								regionArray[b].vtype[1].type=0;
+								regionArray[b].vtype[1].visitList.insert(temp);}
 							b++;
 			}
 		}
