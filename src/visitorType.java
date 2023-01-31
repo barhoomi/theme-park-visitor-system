@@ -1,20 +1,13 @@
 
 public class visitorType {
-	private int type;
-	private int num_visitors;
-	private LinkedList<visitorInfo> visitList;
-
-	public visitorType(int type, int num_visitors, LinkedList<visitorInfo> visitList) {
-		super();
-		this.type = type;
-		this.num_visitors = num_visitors;
-		this.visitList = visitList;
-	}
+	public int type;
+	public int num_visitors;
+	public LinkedList<visitorInfo> visitList;
 
 	public visitorType(int type){
-
+		this.type = type;
+		num_visitors = 0;
+		visitList = new LinkedList();
 	}
-
-
 
 }

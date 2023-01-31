@@ -42,18 +42,22 @@ public class ThemeParkADT {
 
         int k = maxRegion;
         regionArray = new rgnInfo[k];
+        rgnInfo.fillArray(regionArray,k);
 
-        insertRegions(visitors, regionArray);
+        r = insertRegions(visitors, regionArray);
 
-        //insertRegions(visitors, rgnSortedArray);
+        rgnSortedArray = new rgnInfo[r];
+        rgnInfo.fillArray(rgnSortedArray,r);
 
-        //sortRegions(rgnSortedArray,r);
+        r = insertRegions(visitors, rgnSortedArray);
+
+        sortRegions(rgnSortedArray,r);
     }
 
     public void sortRegions(rgnInfo[] arr, int n){
         for(int i = 0; i<n-1; i++){
             for(int j = 0; j<n-1-i; j++){
-                if(arr[j].total_visitors < arr[j+1].total_visitors){
+                if(arr[j].getTotal_visitors() < arr[j+1].getTotal_visitors()){
                     rgnInfo temp = arr[j];
                     arr[j] = arr[j+1];
                     arr[j+1] = temp;
@@ -62,12 +66,13 @@ public class ThemeParkADT {
         }
     }
 
-    private void insertRegions(LinkedList visitors, rgnInfo[] array){
+    private int insertRegions(LinkedList<visitorInfo> visitors, rgnInfo[] array){
         r = 0;
         visitors.findfirst();
-        visitorInfo temp = (visitorInfo) visitors.retrieve();
+        visitorInfo temp;
         boolean last = false;
         while (!last) {
+            temp = visitors.retrieve();
             for (int i = 0; i < r; i++) {
                 if (array[i].region == temp.region) {
                     array[i].total_visitors++;
@@ -77,19 +82,21 @@ public class ThemeParkADT {
                         array[i].vtype[1].visitList.insert(temp);
                 }
             }
-            array[r].region = temp.region;
-            array[r].total_visitors++;
-            if (temp.type == 1) {
-                array[r].vtype[0].visitList.insert(temp);
-            } else
-                array[r].vtype[1].visitList.insert(temp);
-            r++;
+            if(!(r == array.length)){
+                array[r].region = temp.region;
+                array[r].total_visitors++;
+                if (temp.type == 1) {
+                    array[r].vtype[0].visitList.insert(temp);
+                } else
+                    array[r].vtype[1].visitList.insert(temp);
+                r++;
+            }
             if (visitors.last()) last = true;
             else {
                 visitors.findnext();
-                temp = (visitorInfo) visitors.retrieve();
             }
         }
+        return r;
     }
 
     public void searchVISITOR(String lName) {
