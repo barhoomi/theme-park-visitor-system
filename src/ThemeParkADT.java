@@ -2,14 +2,15 @@ import java.io.*;
 
 public class ThemeParkADT {
 	private rgnInfo regionArray[];
+	private int b;
 	private rgnInfo rgnSortedArray[];
 	private int r;
 	private LinkedList<visitorInfo> visitors;
 	private LinkedList<visitorInfo> vips;
 
 	public static void readFileAndAnalyse(String f) throws IOException, ClassNotFoundException {
-		LinkedList<visitorInfo> vips = new LinkedList<visitorInfo>();
-		LinkedList<visitorInfo> visitors = new LinkedList<visitorInfo>();
+		 vips = new LinkedList(); b=0;
+		 visitors = new LinkedList();
 
 		File inF = new File(f);
 		FileReader FR = new FileReader(inF);
@@ -21,7 +22,24 @@ public class ThemeParkADT {
 				currentLine = BFR.readLine();
 				String[] info = currentLine.split(",");
 				visitorInfo visitor = new visitorInfo(info);
-				System.out.println(visitor);
+				visitorInfo temp = visitor;
+						visitors.insert(temp);
+							if(temp.type == 1)
+								vips.insert(temp);
+							for(int i=0 ; i<b ;i++) {
+								if(regionArray[i].region==temp.region) {
+									if(temp.type==1) {
+										regionArray[i].vtype[0].visitList.insert(temp);}
+									else 
+										regionArray[i].vtype[1].visitList.insert(temp);
+								}
+							}
+							regionArray[b].region=temp.region;
+							if(temp.type==1) {
+								regionArray[b].vtype[0].visitList.insert(temp);}
+							else 
+								regionArray[b].vtype[1].visitList.insert(temp);
+							b++;
 			}
 		}
 		catch(Exception e){
