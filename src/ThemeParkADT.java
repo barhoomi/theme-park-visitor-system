@@ -1,9 +1,12 @@
 
 public class ThemeParkADT {
-	private rgnInfo rg;
-	private visitotType ty;
-	private visitorInfo in;
-	private LinkedList ln;
+	private rgnInfo regionArray [];
+	private int k ;
+	private rgnInfo rgnSortedArray [];
+	private int r ;
+	private LinkedList <visitotType> visitors;
+	private LinkedList <visitorInfo> vips;
+	
 	
 	public void readFileAndAnalyse(String f){
 		
