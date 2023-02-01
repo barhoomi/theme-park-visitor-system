@@ -24,4 +24,15 @@ public class ArrayStack<T> {
 	public T pop() {
 		return nodes[top--];
 	}
+
+	@Override
+	public String toString() {
+		String output = "";
+		ArrayStack tempArrayStack = new ArrayStack(maxsize);
+		T tempNode;
+		for(int i = 0; i <= top; i++){
+			output += nodes[i];
+		}
+		return output;
+	}
 }
