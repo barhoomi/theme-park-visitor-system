@@ -215,8 +215,32 @@ public class ThemeParkADT {
         return flag;
     }
 
-    public boolean checkRegLoc(int r, String n1, String n2, boolean flag) {
-        return false;
+  public boolean checkRegLoc(int r, String n1, String n2, boolean flag) {
+    	visitorInfo v1 = null, v2 = null;
+        visitors.findfirst();
+        while (!visitors.last() && (v1 == null || v2 == null)) {
+            visitorInfo v = visitors.retrieve();
+            if (v.phone.equals(n1))
+                v1 = v;
+            else if (v.phone.equals(n2))
+                v2 = v;
+            visitors.findnext();
+           
+        }
+        if (v1 == null || v2 == null)
+        	return flag=false;
+        if (v1.order.empty())
+            return true;
+        Integer top1 = v1.order.pop();
+        Integer top2 = v2.order.pop();
+        v1.order.push(top1);
+        v2.order.push(top2);
+        if(top1 != top2)
+        flag=false;
+        else checkRegLoc(r, n1, n2, flag);
+        
+        
+        
     }
 
 }
