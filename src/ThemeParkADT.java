@@ -98,8 +98,8 @@ public class ThemeParkADT {
 
    public void searchVISITOR(String lNamee) {
     	int c=0;
-    	while(!visitors.last()) {
-    		visitors.findfirst();
+    	visitors.findfirst();
+	   while(!visitors.last()) {
     		visitorInfo temp = visitors.retrieve();
     		if(temp.lName.equalsIgnoreCase(lNamee))
     			printVisData(++c, temp);
@@ -163,9 +163,30 @@ public class ThemeParkADT {
     	}
     }
     
-    public boolean checkVipLoc(String n1,String n2, boolean flag) {
-    	return false;
-    }
+  public boolean checkVipLoc(String n1, String n2, boolean flag) {
+		visitorInfo v1 = null, v2 = null;
+		vips.findfirst();
+		while (!vips.last() && (v1 == null || v2 == null)) {
+			visitorInfo v = vips.retrieve();
+			if (v.phone.equals(n1))
+				v1 = v;
+			else if (v.phone.equals(n2))
+				v2 = v;
+			vips.findnext();
+		}
+		if (v1 == null || v2 == null) {
+			if (v1 == null)
+				System.out.println("There is no visitor with number: " + n1 + ".");
+			if (v2 == null)
+				System.out.println("There is no visitor with number: " + n2 + ".");
+			flag = false;
+		} else if (v1.region != v2.region) {
+			System.out.println("Not in the same region.");
+			flag = false;
+		} else
+			flag = true;
+		return flag;
+	}
 
     public boolean checkRegLoc(int r, String n1, String n2, boolean flag) {
         return false;
