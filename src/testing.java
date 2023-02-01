@@ -5,6 +5,7 @@ public class testing {
             themeParkADT.readFileAndAnalyse("./src/testInput.txt");
 
             //testRegionSortedArray(themeParkADT);
+            testSearchName(themeParkADT, "AlAli");
 
         }
         catch(Exception e){
@@ -25,7 +26,7 @@ public class testing {
         }
     }
 
-    public static void testRegionSortedArray(){
-        testArray()
+    public static void testSearchName(ThemeParkADT themeParkADT, String lName){
+        themeParkADT.searchVisitor(lName);
     }
 }

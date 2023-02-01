@@ -115,20 +115,30 @@ public class ThemeParkADT {
         return r;
     }
 
-    public void searchVISITOR(String lName) {
-        int c = 0;
+    public void searchVisitor(String lName) {
+        int n = 1;
+
         visitors.findfirst();
-        while (!visitors.last()) {
-            visitorInfo temp = visitors.retrieve();
-            if (temp.lName.equalsIgnoreCase(lName))
-                printVisitorData(++c, temp);
+        visitorInfo visitor = visitors.retrieve();
+
+        while (visitor != null) {
+
+            if (visitor.lName.equalsIgnoreCase(lName)) {
+                printVisitorData(n++, visitor);
+            }
+
             visitors.findnext();
+            visitor = visitors.retrieve();
+        }
+
+        if(n==1){
+            System.out.println("No visitors with the last name '"+lName+"' found");
         }
     }
 
     private void printVisitorData(int n, visitorInfo v) {
         System.out.println("Visitor " + n + ":");
-        System.out.println("Name: " + v.fName + v.lName);
+        System.out.println("Name: " + v.fName + " " + v.lName);
         System.out.println("Region: " + v.region);
         System.out.println("VIP Pass holder: " + (v.type == 1? "Yes" : "No"));
         System.out.println("Phone number: " + v.phone);
