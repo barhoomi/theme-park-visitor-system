@@ -8,11 +8,11 @@ public class testing {
 
             for(int i = 0; i < themeParkADT.regionArray.length; i++){
 
-                themeParkADT.regionArray[i].vtype[0].visitList.findfirst();
-                themeParkADT.regionArray[i].vtype[1].visitList.findfirst();
+                LinkedList reg = themeParkADT.regionArray[i].vtype[0].visitList;
+                LinkedList vip = themeParkADT.regionArray[i].vtype[1].visitList;
 
-                System.out.println(themeParkADT.regionArray[i].vtype[0].visitList.retrieve());
-                System.out.println(themeParkADT.regionArray[i].vtype[1].visitList.retrieve());
+                System.out.println(reg);
+                System.out.println(vip);
             }
         }
         catch(Exception e){
