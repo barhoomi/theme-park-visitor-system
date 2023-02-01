@@ -3,9 +3,9 @@ import java.io.*;
 public class ThemeParkADT {
     public rgnInfo[] regionArray;
     public rgnInfo[] rgnSortedArray;
-    private int r;
-    private LinkedList<visitorInfo> visitors;
-    private LinkedList<visitorInfo> vips;
+    public int r;
+    public LinkedList<visitorInfo> visitors;
+    public LinkedList<visitorInfo> vips;
 
     public void readFileAndAnalyse(String f) throws IOException, ClassNotFoundException {
         vips = new LinkedList();
@@ -69,10 +69,8 @@ public class ThemeParkADT {
     private int insertRegions(LinkedList<visitorInfo> visitors, rgnInfo[] array){
         r = 0;
         visitors.findfirst();
-        visitorInfo temp;
-        boolean last = false;
-        while (!last) {
-            temp = visitors.retrieve();
+        visitorInfo temp = visitors.retrieve();
+        while (temp != null) {
             for (int i = 0; i < r; i++) {
                 if (array[i].region == temp.region) {
                     array[i].total_visitors++;
@@ -82,7 +80,7 @@ public class ThemeParkADT {
                         array[i].vtype[1].visitList.insert(temp);
                 }
             }
-            if(!(r == array.length)){
+            if(r < array.length){
                 array[r].region = temp.region;
                 array[r].total_visitors++;
                 if (temp.type == 1) {
@@ -91,10 +89,9 @@ public class ThemeParkADT {
                     array[r].vtype[1].visitList.insert(temp);
                 r++;
             }
-            if (visitors.last()) last = true;
-            else {
-                visitors.findnext();
-            }
+
+            visitors.findnext();
+            temp = visitors.retrieve();
         }
         return r;
     }
