@@ -101,8 +101,8 @@ public class ThemeParkADT {
 
    public void searchVISITOR(String lNamee) {
     	int c=0;
-    	while(!visitors.last()) {
-    		visitors.findfirst();
+    	visitors.findfirst();
+	   while(!visitors.last()) {
     		visitorInfo temp = visitors.retrieve();
     		if(temp.lName.equalsIgnoreCase(lNamee))
     			printVisData(++c, temp);
