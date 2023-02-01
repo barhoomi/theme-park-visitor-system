@@ -54,7 +54,7 @@ public class ThemeParkADT {
         sortRegions(rgnSortedArray, r);
     }
 
-    public void sortRegions(rgnInfo[] arr, int n) {
+    private void sortRegions(rgnInfo[] arr, int n) {
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - 1 - i; j++) {
                 if (arr[j].getTotal_visitors() < arr[j + 1].getTotal_visitors()) {
