@@ -1,25 +1,39 @@
 import java.io.*;
 
 public class ThemeParkADT {
-    public rgnInfo[] regionArray;
-    public rgnInfo[] rgnSortedArray;
+    public rgnInfoArray regionArray;
+    public rgnInfoArray rgnSortedArray;
     public int r;
     public LinkedList<visitorInfo> visitors;
     public LinkedList<visitorInfo> vips;
 
     public void readFileAndAnalyse(String f) throws IOException, ClassNotFoundException {
-        vips = new LinkedList();
-        visitors = new LinkedList();
-
         //r = number of regions
         r = 0;
+
+        //k = max region
+        int k = readFile(f);
+
+        regionArray = new rgnInfoArray(k);
+        r = insertRegions(visitors, regionArray.data);
+
+        rgnSortedArray = new rgnInfoArray(r);
+        r = insertRegions(visitors, rgnSortedArray.data);
+
+        sortRegions(rgnSortedArray.data, r);
+    }
+
+    public int readFile(String f) throws IOException, ClassNotFoundException{
+        int maxRegion = 0;
+
+        vips = new LinkedList();
+        visitors = new LinkedList();
 
         File inF = new File(f);
         FileReader FR = new FileReader(inF);
         BufferedReader BFR = new BufferedReader(FR);
 
         String currentLine = "";
-        int maxRegion = 1;
 
         try {
             while (true) {
@@ -38,20 +52,7 @@ public class ThemeParkADT {
         }
         BFR.close();
         FR.close();
-
-
-        int k = maxRegion;
-        regionArray = new rgnInfo[k];
-        rgnInfo.fillArray(regionArray, k);
-
-        r = insertRegions(visitors, regionArray);
-
-        rgnSortedArray = new rgnInfo[r];
-        rgnInfo.fillArray(rgnSortedArray, r);
-
-        r = insertRegions(visitors, rgnSortedArray);
-
-        sortRegions(rgnSortedArray, r);
+        return maxRegion;
     }
 
     private void sortRegions(rgnInfo[] arr, int n) {
@@ -69,55 +70,67 @@ public class ThemeParkADT {
     private int insertRegions(LinkedList<visitorInfo> visitors, rgnInfo[] array) {
         r = 0;
         visitors.findfirst();
-        visitorInfo temp = visitors.retrieve();
+        visitorInfo visitor = visitors.retrieve();
 
-        while (temp != null) {
+        while (visitor != null) {
+            boolean addedRegion = false;
             for (int i = 0; i < r; i++) {
-                if (array[i].region == temp.region) {
+                if (array[i].region == visitor.region) {
+
                     array[i].total_visitors++;
-                    if (temp.type == 1) {
-                        array[i].vtype[0].visitList.insert(temp);
-                    } else
-                        array[i].vtype[1].visitList.insert(temp);
+                    addedRegion = true;
+
+                    LinkedList vipList = array[i].vtype[0].visitList;
+                    LinkedList regularList = array[i].vtype[1].visitList;
+
+                    if (visitor.type == 1) {
+                        vipList.insert(visitor);
+                    } else {
+                        regularList.insert(visitor);
+                    }
+
                 }
             }
-            if (r < array.length) {
-                array[r].region = temp.region;
+            if (r < array.length && !addedRegion) {
+
+                array[r].region = visitor.region;
                 array[r].total_visitors++;
-                if (temp.type == 1) {
-                    array[r].vtype[0].visitList.insert(temp);
-                } else
-                    array[r].vtype[1].visitList.insert(temp);
+
+                LinkedList vipList = array[r].vtype[0].visitList;
+                LinkedList regularList = array[r].vtype[1].visitList;
+
+                //
+                if (visitor.type == 1) {
+                    vipList.insert(visitor);
+                } else {
+                    regularList.insert(visitor);
+                }
+
                 r++;
             }
 
             visitors.findnext();
-            temp = visitors.retrieve();
+            visitor = visitors.retrieve();
         }
         return r;
     }
 
-    public void searchVISITOR(String lNamee) {
+    public void searchVISITOR(String lName) {
         int c = 0;
         visitors.findfirst();
         while (!visitors.last()) {
             visitorInfo temp = visitors.retrieve();
-            if (temp.lName.equalsIgnoreCase(lNamee))
-                printVisData(++c, temp);
+            if (temp.lName.equalsIgnoreCase(lName))
+                printVisitorData(++c, temp);
             visitors.findnext();
         }
     }
 
-    private void printVisData(int n, visitorInfo v) {
+    private void printVisitorData(int n, visitorInfo v) {
         System.out.println("Visitor " + n + ":");
         System.out.println("Name: " + v.fName + v.lName);
-        System.out.println("Rwgion: " + v.region);
-        String s;
-        if (v.type == 1)
-            s = "Yes";
-        else
-            s = "No";
-        System.out.println("VIP Pass holder: " + s);
+        System.out.println("Region: " + v.region);
+        System.out.println("VIP Pass holder: " + (v.type == 1? "Yes" : "No"));
         System.out.println("Phone number: " + v.phone);
 
         System.out.print("Order of visiting the kingdoms: ");
@@ -126,13 +139,13 @@ public class ThemeParkADT {
     }
 
     private void printStack(ArrayStack<Integer> st) {
-        if (st.empty())
-            return;
+        if (st.empty()) return;
+
         Integer top = st.pop();
         System.out.println(top);
+
         printStack(st);
         st.push(top);
-        return;
     }
 
 
@@ -141,26 +154,29 @@ public class ThemeParkADT {
     }
 
     public void popularRgn() {
-        for (int i = 0; i < rgnSortedArray.length; i++) {
-            System.out.println("Region " + rgnSortedArray[i].region + ": " + rgnSortedArray[i].total_visitors);
+        for (int i = 0; i < rgnSortedArray.data.length; i++) {
+            System.out.println("Region " + rgnSortedArray.data[i].region + ": " + rgnSortedArray.data[i].total_visitors);
         }
     }
 
     public void vipRgn(int r) {
-        for (int i = 0; i < regionArray.length; i++) {
-            if (regionArray[i].region == r)
-                System.out.println("The total number of VIP pass holders coming from Region " + r + " is " + regionArray[i].vtype[0].num_visitors);
+        for (int i = 0; i < regionArray.data.length; i++) {
+            if (regionArray.data[i].region == r)
+                System.out.println("The total number of VIP pass holders coming from Region " + r + " is " + regionArray.data[i].vtype[0].num_visitors);
         }
     }
 
-    public void vipLication() {
-        while (!vips.last()) {
-            vips.findfirst();
-            visitorInfo temp = vips.retrieve();
-            Integer x = temp.order.pop();
-            System.out.println(temp.fName + " " + temp.lName + " in Kingdom " + x);
-            temp.order.push(x);
+    public void vipLocation() {
+        vips.findfirst();
+        visitorInfo visitor = vips.retrieve();
+        while (visitor != null) {
+
+            Integer kingdom = visitor.order.pop();
+            System.out.println(visitor.fName + " " + visitor.lName + " in Kingdom " + kingdom);
+            visitor.order.push(kingdom);
+
             vips.findnext();
+            visitor = vips.retrieve();
         }
     }
 
