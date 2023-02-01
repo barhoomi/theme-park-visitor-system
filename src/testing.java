@@ -13,29 +13,9 @@ public class testing {
 
                 LinkedList<visitorInfo> vipList = themeParkADT.regionArray[i].vtype[0].visitList;
                 LinkedList<visitorInfo> regList = themeParkADT.regionArray[i].vtype[1].visitList;
-                vipList.findfirst();
-                regList.findfirst();
-                visitorInfo tempVip = vipList.retrieve();
-                visitorInfo tempReg = regList.retrieve();
 
-
-                while(tempVip != null){
-                    System.out.println("--------------");
-                    System.out.println("Visitor "+(++visitorCounter)+": ");
-                    System.out.println("--------------");
-                    tempVip.printVisitorInfo();
-                    vipList.findnext();
-                    tempVip = vipList.retrieve();
-                }
-
-                while(tempReg != null){
-                    System.out.println("--------------");
-                    System.out.println("Visitor "+(++visitorCounter)+": ");
-                    System.out.println("--------------");
-                    tempReg.printVisitorInfo();
-                    regList.findnext();
-                    tempReg = regList.retrieve();
-                }
+                vipList.printVisitors();
+                regList.printVisitors();
             }
         }
         catch(Exception e){

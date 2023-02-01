@@ -63,5 +63,16 @@ public class LinkedList<T>{
 				current = current.next;
 	}
 
+	public void printVisitors(){
+		findfirst();
+		visitorInfo temp = (visitorInfo) retrieve();
+		while(temp != null){
+			System.out.println("--------------------");
+			temp.printVisitorInfo();
+			findnext();
+			temp = (visitorInfo) retrieve();
+		}
+	}
+
 
 }
