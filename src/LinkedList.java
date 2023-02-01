@@ -25,7 +25,10 @@ public class LinkedList<T>{
 		current = current.next;
 	}
 	public T retrieve () {
-		return current.data;
+		if(current!=null) {
+			return current.data;
+		}
+		else return null;
 	} 
 	public void update (T val) {
 		current.data = val;
