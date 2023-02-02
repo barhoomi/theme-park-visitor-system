@@ -3,37 +3,40 @@ import java.io.*;
 public class ThemeParkADT {
     public rgnInfoArray regionArray;
     public rgnInfoArray rgnSortedArray;
-    public int r;
+    public int totalRegions;
     public LinkedList<visitorInfo> visitors;
     public LinkedList<visitorInfo> vips;
 
-    public void readFileAndAnalyse(String f) throws IOException, ClassNotFoundException {
-        //r = number of regions
-        r = 0;
+    public void readFileAndAnalyse(String f){
+        try {
+            //r = number of regions
+            totalRegions = 0;
 
-        //k = max region
-        int k = readFile(f);
-
-
-        regionArray = new rgnInfoArray(k + 1);
-        r = insertRegions(visitors, regionArray.data);
-
-        rgnInfoArray arr = new rgnInfoArray(k + 1);
-        r = insertRegions(visitors, arr.data);
-        sortRegions(arr.data, k);
+            //k = max region
+            int k = readFile(f);
 
 
-        rgnSortedArray = new rgnInfoArray(r);
+            regionArray = new rgnInfoArray(k + 1);
+            totalRegions = insertRegions(visitors, regionArray.data);
 
-        for(int i = 0; i < r; i++){
-            rgnSortedArray.data[i] = arr.data[i];
+            rgnInfoArray arr = new rgnInfoArray(k + 1);
+            totalRegions = insertRegions(visitors, arr.data);
+            sortRegions(arr.data, k);
+
+
+            rgnSortedArray = new rgnInfoArray(totalRegions);
+
+            for (int i = 0; i < totalRegions; i++) {
+                rgnSortedArray.data[i] = arr.data[i];
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
         }
-
     }
 
-    private int readFile(String f) throws IOException, ClassNotFoundException {
+    private int readFile(String f) throws IOException, ClassNotFoundException, Exception {
         int maxRegion = 0;
-
         vips = new LinkedList();
         visitors = new LinkedList();
 
@@ -43,6 +46,7 @@ public class ThemeParkADT {
         BufferedReader BFR = new BufferedReader(FR);
 
         String currentLine = "";
+        boolean whiteSpaceFound = false;
 
         //loop over lines in file F,
         // convert text to visitor info,
@@ -52,6 +56,10 @@ public class ThemeParkADT {
                 currentLine = BFR.readLine();
 
                 String[] info = currentLine.split(",");
+
+                whiteSpaceFound = checkForWhitespace(info);
+                if(whiteSpaceFound) break;
+
                 visitorInfo visitor = new visitorInfo(info);
 
                 visitors.insert(visitor);
@@ -60,11 +68,30 @@ public class ThemeParkADT {
             }
 
         } catch (Exception e) {
-            System.out.println("end of file reached");
+            //System.out.println(e);
         }
         BFR.close();
         FR.close();
+        
+        if(whiteSpaceFound){
+            throw new Exception("\n!!!!!Whitespace is not allowed in input!!!!!\n");
+        }
+        
         return maxRegion;
+    }
+
+    private boolean checkForWhitespace(String[] info){
+        boolean whiteSpaceFound = false;
+        for(int i = 0; i < info.length; i++){
+            char[] chars = info[i].toCharArray();
+            for(int j = 0; j < chars.length; j++){
+                if(Character.isWhitespace(chars[j])) {
+
+                    whiteSpaceFound = true;
+                }
+            }
+        }
+        return whiteSpaceFound;
     }
 
     private void sortRegions(rgnInfo[] arr, int n) {
@@ -80,17 +107,17 @@ public class ThemeParkADT {
     }
 
     private int insertRegions(LinkedList<visitorInfo> visitors, rgnInfo[] array) {
-        r = 0;
+        int totalRegions = 0;
         visitors.findfirst();
         visitorInfo temp = visitors.retrieve();
 
         while (temp != null) {
 
             rgnInfo currentRegion = array[temp.region];
+
+            if (currentRegion.total_visitors == 0) totalRegions++;
+
             int x = temp.type == 1 ? 0 : 1;
-
-            if (currentRegion.total_visitors == 0) r++;
-
             currentRegion.vtype[x].visitList.insert(temp);
 
             currentRegion.vtype[x].num_visitors++;
@@ -99,9 +126,11 @@ public class ThemeParkADT {
             visitors.findnext();
             temp = visitors.retrieve();
         }
-        return r;
+        return totalRegions;
     }
 
+
+    //Operation 1
     public void searchVisitor(String lName) {
         int n = 1;
 
@@ -139,23 +168,31 @@ public class ThemeParkADT {
         if (st.empty()) return;
 
         Integer top = st.pop();
-        System.out.println(top);
+
+        if(st.empty()){
+            System.out.println(top);
+        }
+        else{
+            System.out.print(top+",");
+        }
 
         printStack(st);
         st.push(top);
     }
 
-
+    //Operation 2
     public void rgnCount() {
-        System.out.println("The total number of regions are " + r);
+        System.out.println("The total number of regions are " + totalRegions);
     }
 
+    //Operation 3
     public void popularRgn() {
         for (int i = 0; i < rgnSortedArray.data.length; i++) {
             System.out.println("Region " + rgnSortedArray.data[i].region + ": " + rgnSortedArray.data[i].total_visitors);
         }
     }
 
+    //Operation 4
     public void vipRgn(int r) {
         for (int i = 0; i < regionArray.data.length; i++) {
             if (regionArray.data[i].region == r)
@@ -163,6 +200,7 @@ public class ThemeParkADT {
         }
     }
 
+    //Operation 5
     public void vipLocation() {
         vips.findfirst();
         visitorInfo visitor = vips.retrieve();
@@ -177,6 +215,7 @@ public class ThemeParkADT {
         }
     }
 
+    //Operation 6
     public boolean checkVipLoc(String n1, String n2, boolean flag) {
         visitorInfo v1 = null, v2 = null;
         vips.findfirst();
@@ -202,8 +241,10 @@ public class ThemeParkADT {
         return flag;
     }
 
-    public boolean checkRegLoc(int r, String n1, String n2, boolean flag) {
+    //Operation 7
+    public boolean checkRegLoc(int r, String n1, String n2) {
         visitorInfo v1 = null, v2 = null;
+        boolean flag = false;
         visitors.findfirst();
         while (!visitors.last() && (v1 == null || v2 == null)) {
             visitorInfo v = visitors.retrieve();
@@ -217,29 +258,27 @@ public class ThemeParkADT {
         if (v1 == null || v2 == null) {
             if (v1 == null) {
                 System.out.println("There is no visitor with number: " + n1 + ".");
-                return flag = false;
             }
             if (v2 == null) {
                 System.out.println("There is no visitor with number: " + n2 + ".");
-                return flag = false;
             }
+            return flag = false;
         }
         if (r != v1.region || r != v2.region) {
             if (r != v1.region) {
                 System.out.println("The visitor with number: " + n1 + " is not from region " + r + ".");
-                return flag = false;
             }
             if (r != v2.region) {
                 System.out.println("The visitor with number: " + n2 + " is not from region " + r + ".");
-                return flag = false;
             }
+            return flag = false;
         }
-        flag = checkRegLoc(v1, v2, flag);
+        flag = sameVisitOrder(v1, v2, flag);
         return flag;
 
     }
 
-    private boolean checkRegLoc(visitorInfo v1, visitorInfo v2, boolean flag) {
+    private boolean sameVisitOrder(visitorInfo v1, visitorInfo v2, boolean flag) {
         int top1 = 0;
         int top2 = 0;
         if (v1.order.empty())
@@ -253,7 +292,7 @@ public class ThemeParkADT {
             System.out.println("Orders are not the same.");
             flag = false;
         } else if (flag != true)
-            flag = checkRegLoc(v1, v2, flag);
+            flag = sameVisitOrder(v1, v2, flag);
         v1.order.push(top1);
         v2.order.push(top2);
         return flag;
