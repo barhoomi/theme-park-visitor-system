@@ -1,3 +1,4 @@
+
 public class visitorInfo {
 	public String fName,lName,phone;
 	public int region,type;
@@ -14,4 +15,13 @@ public class visitorInfo {
 			order.push(Integer.parseInt(info[i]));
 		}
 	}
+
+	public void printVisitorInfo(){
+		System.out.println("Name: "+fName+" "+lName);
+		System.out.println("Region: "+region);
+		System.out.println("Phone Number: "+phone);
+		System.out.println("VIP Pass holder: "+(type==1?"Yes":"No"));
+		System.out.println("Order of visiting the kingdoms: "+order.toString());
+	}
+
 }
