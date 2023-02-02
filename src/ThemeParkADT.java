@@ -7,23 +7,29 @@ public class ThemeParkADT {
     public LinkedList<visitorInfo> visitors;
     public LinkedList<visitorInfo> vips;
 
-    public void readFileAndAnalyse(String f) throws IOException, ClassNotFoundException {
-        //r = number of regions
-        r = 0;
+   public void readFileAndAnalyse(String f) throws IOException, ClassNotFoundException {
+	        //r = number of regions
+	        r = 0;
 
-        //k = max region
-        int k = readFile(f);
+	        //k = max region
+	        int k = readFile(f);
 
-        regionArray = new rgnInfoArray(k);
-        r = insertRegions(visitors, regionArray.data);
+	        regionArray = new rgnInfoArray(k);
+	        r = insertRegions(visitors, regionArray.data);
+	        
+	        rgnInfoArray arr = new rgnInfoArray(k);
+	        r = insertRegions(visitors, arr.data);
+	        sortRegions(arr.data, k);
+	        
+	 
+	        rgnSortedArray = new rgnInfoArray(r);
+	        
+	         for(int i = 0 ; i<r ; i++)
+	        	rgnSortedArray.data[i]=arr.data[i];
+	 
+	    }
 
-        rgnSortedArray = new rgnInfoArray(r);
-        r = insertRegions(visitors, rgnSortedArray.data);
-
-        sortRegions(rgnSortedArray.data, r);
-    }
-
-    public int readFile(String f) throws IOException, ClassNotFoundException{
+	    private int readFile(String f) throws IOException, ClassNotFoundException{
         int maxRegion = 0;
 
         vips = new LinkedList();
@@ -68,52 +74,28 @@ public class ThemeParkADT {
     }
 
     private int insertRegions(LinkedList<visitorInfo> visitors, rgnInfo[] array) {
-        r = 0;
-        visitors.findfirst();
-        visitorInfo visitor = visitors.retrieve();
-
-        while (visitor != null) {
-            boolean addedRegion = false;
-            for (int i = 0; i < r; i++) {
-                if (array[i].region == visitor.region) {
-
-                    array[i].total_visitors++;
-                    addedRegion = true;
-
-                    LinkedList vipList = array[i].vtype[0].visitList;
-                    LinkedList regularList = array[i].vtype[1].visitList;
-
-                    if (visitor.type == 1) {
-                        vipList.insert(visitor);
-                    } else {
-                        regularList.insert(visitor);
-                    }
-
-                }
-            }
-            if (r < array.length && !addedRegion) {
-
-                array[r].region = visitor.region;
-                array[r].total_visitors++;
-
-                LinkedList vipList = array[r].vtype[0].visitList;
-                LinkedList regularList = array[r].vtype[1].visitList;
-
-                //
-                if (visitor.type == 1) {
-                    vipList.insert(visitor);
-                } else {
-                    regularList.insert(visitor);
-                }
-
-                r++;
-            }
-
-            visitors.findnext();
-            visitor = visitors.retrieve();
-        }
-        return r;
-    }
+	        r = 0;
+	        visitors.findfirst();
+	        visitorInfo temp = visitors.retrieve();
+	       
+	        while (temp != null) {
+	        	
+	        	if(array[temp.region].total_visitors==0)
+	        		r++;
+	        	if(temp.type == 1) {
+	        		
+	        		array[temp.region].vtype[0].num_visitors++;
+	        		array[temp.region].vtype[0].visitList.insert(temp);}
+	        	else {
+	        		array[temp.region].vtype[1].num_visitors++;
+	        		array[temp.region].vtype[1].visitList.insert(temp);}
+	        	
+	        	visitors.findnext();
+	        	temp=visitors.retrieve();
+	        }
+	        
+	         return r ;        
+	    }
 
     public void searchVisitor(String lName) {
         int n = 1;
