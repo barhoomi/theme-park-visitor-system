@@ -29,12 +29,16 @@ public class ThemeParkADT {
         vips = new LinkedList();
         visitors = new LinkedList();
 
+        //open file F
         File inF = new File(f);
         FileReader FR = new FileReader(inF);
         BufferedReader BFR = new BufferedReader(FR);
 
         String currentLine = "";
 
+        //loop over lines in file F,
+        // convert text to visitor info,
+        // then add visitors to their corresponding lists
         try {
             while (true) {
                 currentLine = BFR.readLine();
