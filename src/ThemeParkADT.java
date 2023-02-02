@@ -215,32 +215,62 @@ public class ThemeParkADT {
         return flag;
     }
 
-  public boolean checkRegLoc(int r, String n1, String n2, boolean flag) {
-    	visitorInfo v1 = null, v2 = null;
-        visitors.findfirst();
-        while (!visitors.last() && (v1 == null || v2 == null)) {
-            visitorInfo v = visitors.retrieve();
-            if (v.phone.equals(n1))
-                v1 = v;
-            else if (v.phone.equals(n2))
-                v2 = v;
-            visitors.findnext();
-           
-        }
-        if (v1 == null || v2 == null)
-        	return flag=false;
-        if (v1.order.empty())
-            return true;
-        Integer top1 = v1.order.pop();
-        Integer top2 = v2.order.pop();
-        v1.order.push(top1);
-        v2.order.push(top2);
-        if(top1 != top2)
-        flag=false;
-        else checkRegLoc(r, n1, n2, flag);
-        
-        
-        
-    }
+public boolean checkRegLoc(int r, String n1, String n2, boolean flag) {
+		visitorInfo v1 = null, v2 = null;
+		visitors.findfirst();
+		while (!visitors.last() && (v1 == null || v2 == null)) {
+			visitorInfo v = visitors.retrieve();
+			if (v.phone.equals(n1))
+				v1 = v;
+			else if (v.phone.equals(n2))
+				v2 = v;
+			visitors.findnext();
+
+		}
+		if (v1 == null || v2 == null) {
+			if (v1 == null) {
+				System.out.println("There is no visitor with number: " + n1 + ".");
+				return flag = false;
+			}
+			if (v2 == null) {
+				System.out.println("There is no visitor with number: " + n2 + ".");
+				return flag = false;
+			}
+		}
+		if (r != v1.region || r != v2.region) {
+			if (r != v1.region) {
+				System.out.println("The visitor with number: " + n1 + " is not from region " + r + ".");
+				return flag = false;
+			}
+			if (r != v2.region) {
+				System.out.println("The visitor with number: " + n2 + " is not from region " + r + ".");
+				return flag = false;
+			}
+		}
+		flag = checkRegLoc(v1, v2, flag);
+		return flag;
+
+	}
+
+	private boolean checkRegLoc(visitorInfo v1, visitorInfo v2, boolean flag) {
+		int top1=0;
+		int top2=0;
+		if (v1.order.empty())
+			return flag = true;
+		else {
+			top1 = v1.order.pop();
+			top2 = v2.order.pop();
+		}
+
+		if (top1 != top2) {
+			System.out.println("Orders are not the same.");
+			flag = false;
+		} else if(flag!=true)
+			flag = checkRegLoc(v1, v2, flag);
+		v1.order.push(top1);
+		v2.order.push(top2);
+		return flag;
+	}
+
 
 }
