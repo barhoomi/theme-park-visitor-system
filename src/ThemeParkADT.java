@@ -15,18 +15,19 @@ public class ThemeParkADT {
         int k = readFile(f);
 
 
-        regionArray = new rgnInfoArray(k);
+        regionArray = new rgnInfoArray(k + 1);
         r = insertRegions(visitors, regionArray.data);
 
-        rgnInfoArray arr = new rgnInfoArray(k);
+        rgnInfoArray arr = new rgnInfoArray(k + 1);
         r = insertRegions(visitors, arr.data);
         sortRegions(arr.data, k);
 
 
         rgnSortedArray = new rgnInfoArray(r);
 
-        for (int i = 0; i <= r; i++)
+        for(int i = 0; i < r; i++){
             rgnSortedArray.data[i] = arr.data[i];
+        }
 
     }
 
@@ -85,22 +86,19 @@ public class ThemeParkADT {
 
         while (temp != null) {
 
-            System.out.println(temp.region);
-            if (array[temp.region].total_visitors == 0)
-                r++;
-            if (temp.type == 1) {
+            rgnInfo currentRegion = array[temp.region];
+            int x = temp.type == 1 ? 0 : 1;
 
-                array[temp.region].vtype[0].num_visitors++;
-                array[temp.region].vtype[0].visitList.insert(temp);
-            } else {
-                array[temp.region].vtype[1].num_visitors++;
-                array[temp.region].vtype[1].visitList.insert(temp);
-            }
+            if (currentRegion.total_visitors == 0) r++;
+
+            currentRegion.vtype[x].visitList.insert(temp);
+
+            currentRegion.vtype[x].num_visitors++;
+            currentRegion.total_visitors++;
 
             visitors.findnext();
             temp = visitors.retrieve();
         }
-
         return r;
     }
 

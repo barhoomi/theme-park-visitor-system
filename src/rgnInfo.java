@@ -10,7 +10,7 @@ public class rgnInfo {
 	}
 
 	public static void fillArray(rgnInfo[] array, int size){
-		for(int i = 0; i <= size; i++){
+		for(int i = 0; i < size; i++){
 			array[i] = new rgnInfo();
 		}
 	}
