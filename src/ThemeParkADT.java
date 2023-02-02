@@ -1,11 +1,11 @@
 import java.io.*;
 
 public class ThemeParkADT {
-    public rgnInfoArray regionArray;
-    public rgnInfoArray rgnSortedArray;
-    public int totalRegions;
-    public LinkedList<visitorInfo> visitors;
-    public LinkedList<visitorInfo> vips;
+    private rgnInfoArray regionArray;
+    private rgnInfoArray rgnSortedArray;
+    private int totalRegions;
+    private LinkedList<visitorInfo> visitors;
+    private LinkedList<visitorInfo> vips;
 
     public void readFileAndAnalyse(String f){
         try {
@@ -21,12 +21,13 @@ public class ThemeParkADT {
 
             rgnInfoArray arr = new rgnInfoArray(k + 1);
             totalRegions = insertRegions(visitors, arr.data);
-            sortRegions(arr.data, k);
+            sortRegions(arr.data, k+1);
 
 
             rgnSortedArray = new rgnInfoArray(totalRegions);
 
             for (int i = 0; i < totalRegions; i++) {
+       
                 rgnSortedArray.data[i] = arr.data[i];
             }
 
@@ -115,8 +116,10 @@ public class ThemeParkADT {
 
             rgnInfo currentRegion = array[temp.region];
 
-            if (currentRegion.total_visitors == 0) totalRegions++;
-
+            if (currentRegion.total_visitors == 0) {
+            	totalRegions++;
+            	array[temp.region].region=temp.region;
+            }
             int x = temp.type == 1 ? 0 : 1;
             currentRegion.vtype[x].visitList.insert(temp);
 
@@ -160,23 +163,26 @@ public class ThemeParkADT {
         System.out.println("Phone number: " + v.phone);
 
         System.out.print("Order of visiting the kingdoms: ");
-        printStack(v.order);
+        Integer x =v.order.pop();
+        v.order.push(x);
+        printStack(v.order,x);
+        System.out.println(" ");
 
     }
 
-    private void printStack(ArrayStack<Integer> st) {
+    private void printStack(ArrayStack<Integer> st,Integer n) {
         if (st.empty()) return;
 
         Integer top = st.pop();
-
-        if(st.empty()){
+        printStack(st,n);
+        
+        if(top == n){
             System.out.println(top);
         }
         else{
             System.out.print(top+",");
         }
 
-        printStack(st);
         st.push(top);
     }
 
@@ -216,11 +222,13 @@ public class ThemeParkADT {
     }
 
     //Operation 6
-    public boolean checkVipLoc(String n1, String n2, boolean flag) {
+    public boolean checkVipLoc(String n1, String n2) {
+    	boolean flag;
         visitorInfo v1 = null, v2 = null;
         vips.findfirst();
+        
         while (!vips.last() && (v1 == null || v2 == null)) {
-            visitorInfo v = vips.retrieve();
+        	visitorInfo v = vips.retrieve();
             if (v.phone.equals(n1))
                 v1 = v;
             else if (v.phone.equals(n2))
