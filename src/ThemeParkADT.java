@@ -223,11 +223,12 @@ public class ThemeParkADT {
 
     //Operation 6
     public boolean checkVipLoc(String n1, String n2) {
-    	boolean flag;
+    	boolean flag,last=false;
         visitorInfo v1 = null, v2 = null;
         vips.findfirst();
         
-        while (!vips.last() && (v1 == null || v2 == null)) {
+        while (!last && (v1 == null || v2 == null)) {
+        	last = vips.last();
         	visitorInfo v = vips.retrieve();
             if (v.phone.equals(n1))
                 v1 = v;
@@ -244,8 +245,16 @@ public class ThemeParkADT {
         } else if (v1.region != v2.region) {
             System.out.println("Not in the same region.");
             flag = false;
-        } else
-            flag = true;
+        } else {
+        	Integer q =  v1.order.pop() , w = v2.order.pop();
+        	if ( q == w ) {
+        		flag = true;}
+        	else {
+        		flag = false ;}
+        v1.order.push(q); 
+        v2.order.push(w);
+          }
+        
         return flag;
     }
 
