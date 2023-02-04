@@ -2,34 +2,34 @@ import java.io.*;
 import java.util.Objects;
 
 public class ThemeParkADT {
-    private rgnInfoArray regionArray;
-    private rgnInfoArray rgnSortedArray;
+    private rgnInfo[] regionArray;
+    private rgnInfo[] rgnSortedArray;
     private int totalRegions;
     private LinkedList<visitorInfo> visitors;
     private LinkedList<visitorInfo> vips;
 
     public void readFileAndAnalyse(String f) {
         try {
-            //r = number of regions
+
             totalRegions = 0;
-
-            //k = max region
-            int k = readFile(f);
+            int maxRegion = readFile(f);
 
 
-            regionArray = new rgnInfoArray(k + 1);
-            totalRegions = insertRegions(visitors, regionArray.data);
+            regionArray = rgnInfo.createEmptyArray(maxRegion+1);
 
-            rgnInfoArray arr = new rgnInfoArray(k + 1);
-            totalRegions = insertRegions(visitors, arr.data);
-            sortRegions(arr.data, k + 1);
+            totalRegions = insertRegions(visitors, regionArray);
 
 
-            rgnSortedArray = new rgnInfoArray(totalRegions);
+            rgnInfo[] arr = rgnInfo.createEmptyArray(maxRegion + 1);
+
+            totalRegions = insertRegions(visitors, arr);
+            sortRegions(arr, maxRegion + 1);
+
+
+            rgnSortedArray = rgnInfo.createEmptyArray(totalRegions);
 
             for (int i = 0; i < totalRegions; i++) {
-
-                rgnSortedArray.data[i] = arr.data[i];
+                rgnSortedArray[i] = arr[i];
             }
 
         } catch (Exception e) {
@@ -121,9 +121,11 @@ public class ThemeParkADT {
                 totalRegions++;
                 array[temp.region].region = temp.region;
             }
-            int x = temp.type == 1 ? 0 : 1;
-            currentRegion.vtype[x].visitList.insert(temp);
 
+            //if temp.type is 1, add to vip list, but if it's 0 add to regular list
+            int x = temp.type == 1 ? 0 : 1;
+
+            currentRegion.vtype[x].visitList.insert(temp);
             currentRegion.vtype[x].num_visitors++;
             currentRegion.total_visitors++;
 
@@ -193,8 +195,8 @@ public class ThemeParkADT {
 
     //Operation 3
     public void popularRgn() {
-        for (int i = 0; i < rgnSortedArray.data.length; i++) {
-            System.out.println("Region " + rgnSortedArray.data[i].region + ": " + rgnSortedArray.data[i].total_visitors);
+        for (int i = 0; i < rgnSortedArray.length; i++) {
+            System.out.println("Region " + rgnSortedArray[i].region + ": " + rgnSortedArray[i].total_visitors);
         }
     }
 
@@ -204,9 +206,9 @@ public class ThemeParkADT {
             System.out.println("The total number of VIP pass holders coming from Region " + r + " is " + 0);
             return;
         }
-        for (int i = 0; i < regionArray.data.length; i++) {
-            if (regionArray.data[i].region == r)
-                System.out.println("The total number of VIP pass holders coming from Region " + r + " is " + regionArray.data[i].vtype[0].num_visitors);
+        for (int i = 0; i < regionArray.length; i++) {
+            if (regionArray[i].region == r)
+                System.out.println("The total number of VIP pass holders coming from Region " + r + " is " + regionArray[i].vtype[0].num_visitors);
         }
     }
 
