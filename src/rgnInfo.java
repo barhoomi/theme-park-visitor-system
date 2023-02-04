@@ -16,8 +16,4 @@ public class rgnInfo {
 		}
 		return array;
 	}
-
-	public int getTotal_visitors() {
-		return total_visitors;
-	}
 }
