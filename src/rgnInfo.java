@@ -9,10 +9,12 @@ public class rgnInfo {
 		vtype = new visitorType[]{new visitorType(1), new visitorType(0)};
 	}
 
-	public static void fillArray(rgnInfo[] array, int size){
+	public static rgnInfo[] createEmptyArray(int size){
+		rgnInfo[] array = new rgnInfo[size];
 		for(int i = 0; i < size; i++){
 			array[i] = new rgnInfo();
 		}
+		return array;
 	}
 
 	public int getTotal_visitors() {
