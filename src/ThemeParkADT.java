@@ -310,9 +310,6 @@ public class ThemeParkADT {
 
         if (v1.order.empty() && v2.order.empty()) return true;
 
-        if(v1.order.empty()) return false;
-        if(v2.order.empty()) return false;
-
         int top1 = v1.order.pop();
         int top2 = v2.order.pop();
 
