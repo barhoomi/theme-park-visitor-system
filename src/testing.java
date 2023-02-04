@@ -4,28 +4,46 @@ public class testing {
         themeParkADT.readFileAndAnalyse("./src/testInput.txt");
 
         //testRegionSortedArray(themeParkADT);
-        testSearchName(themeParkADT, "AlAli");
 
+        //Operation 1
+        //themeParkADT.searchVisitor("AlAli");
+        //themeParkADT.searchVisitor("AlSaleh");
+        //themeParkADT.searchVisitor("Salem");
+        //themeParkADT.searchVisitor("Al");
+        //outputs are correct!
+
+
+
+        //Operation 2
         //themeParkADT.rgnCount();
+        //outputs are correct!
 
+        //Operation 3
+        //themeParkADT.popularRgn();
+        //outputs are correct!
+
+        //Operation 4
+        //themeParkADT.vipRgn(1);
+        //themeParkADT.vipRgn(2);
+        //themeParkADT.vipRgn(3);
+        //themeParkADT.vipRgn(4);
+        //themeParkADT.vipRgn(5);
+        //themeParkADT.vipRgn(6);
+        //outputs are correct!
+
+
+        //Operation 5
+        //themeParkADT.vipLocation();
+        //outputs are correct!
+
+
+        //Operation 6
+        System.out.println(themeParkADT.checkVipLoc("0505000000","0504000000"));  //false
+        System.out.println(themeParkADT.checkVipLoc("0555555555","0544444444")); //true
+        System.out.println(themeParkADT.checkVipLoc("0533333333","0500000000")); //n1 is not vip
+
+        //Operation 7
         //boolean b = themeParkADT.checkRegLoc(1, "0555555555","0544444444");
         //System.out.println(b);
-    }
-
-    public static void testArray(rgnInfoArray rgnInfoArray) {
-        for (int i = 0; i < rgnInfoArray.data.length; i++) {
-
-            System.out.println("========REGION " + i + "=============");
-
-            LinkedList<visitorInfo> vipList = rgnInfoArray.data[i].vtype[0].visitList;
-            LinkedList<visitorInfo> regList = rgnInfoArray.data[i].vtype[1].visitList;
-
-            vipList.printVisitors();
-            regList.printVisitors();
-        }
-    }
-
-    public static void testSearchName(ThemeParkADT themeParkADT, String lName) {
-        themeParkADT.searchVisitor(lName);
     }
 }

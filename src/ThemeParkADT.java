@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Objects;
 
 public class ThemeParkADT {
     private rgnInfoArray regionArray;
@@ -7,7 +8,7 @@ public class ThemeParkADT {
     private LinkedList<visitorInfo> visitors;
     private LinkedList<visitorInfo> vips;
 
-    public void readFileAndAnalyse(String f){
+    public void readFileAndAnalyse(String f) {
         try {
             //r = number of regions
             totalRegions = 0;
@@ -21,13 +22,13 @@ public class ThemeParkADT {
 
             rgnInfoArray arr = new rgnInfoArray(k + 1);
             totalRegions = insertRegions(visitors, arr.data);
-            sortRegions(arr.data, k+1);
+            sortRegions(arr.data, k + 1);
 
 
             rgnSortedArray = new rgnInfoArray(totalRegions);
 
             for (int i = 0; i < totalRegions; i++) {
-       
+
                 rgnSortedArray.data[i] = arr.data[i];
             }
 
@@ -59,7 +60,7 @@ public class ThemeParkADT {
                 String[] info = currentLine.split(",");
 
                 whiteSpaceFound = checkForWhitespace(info);
-                if(whiteSpaceFound) break;
+                if (whiteSpaceFound) break;
 
                 visitorInfo visitor = new visitorInfo(info);
 
@@ -73,20 +74,20 @@ public class ThemeParkADT {
         }
         BFR.close();
         FR.close();
-        
-        if(whiteSpaceFound){
+
+        if (whiteSpaceFound) {
             throw new Exception("\n!!!!!Whitespace is not allowed in input!!!!!\n");
         }
-        
+
         return maxRegion;
     }
 
-    private boolean checkForWhitespace(String[] info){
+    private boolean checkForWhitespace(String[] info) {
         boolean whiteSpaceFound = false;
-        for(int i = 0; i < info.length; i++){
+        for (int i = 0; i < info.length; i++) {
             char[] chars = info[i].toCharArray();
-            for(int j = 0; j < chars.length; j++){
-                if(Character.isWhitespace(chars[j])) {
+            for (int j = 0; j < chars.length; j++) {
+                if (Character.isWhitespace(chars[j])) {
 
                     whiteSpaceFound = true;
                 }
@@ -117,8 +118,8 @@ public class ThemeParkADT {
             rgnInfo currentRegion = array[temp.region];
 
             if (currentRegion.total_visitors == 0) {
-            	totalRegions++;
-            	array[temp.region].region=temp.region;
+                totalRegions++;
+                array[temp.region].region = temp.region;
             }
             int x = temp.type == 1 ? 0 : 1;
             currentRegion.vtype[x].visitList.insert(temp);
@@ -163,24 +164,23 @@ public class ThemeParkADT {
         System.out.println("Phone number: " + v.phone);
 
         System.out.print("Order of visiting the kingdoms: ");
-        Integer x =v.order.pop();
+        Integer x = v.order.pop();
         v.order.push(x);
-        printStack(v.order,x);
+        printStack(v.order, x);
         System.out.println(" ");
 
     }
 
-    private void printStack(ArrayStack<Integer> st,Integer n) {
+    private void printStack(ArrayStack<Integer> st, Integer n) {
         if (st.empty()) return;
 
         Integer top = st.pop();
-        printStack(st,n);
-        
-        if(top == n){
+        printStack(st, n);
+
+        if (top == n) {
             System.out.println(top);
-        }
-        else{
-            System.out.print(top+",");
+        } else {
+            System.out.print(top + ",");
         }
 
         st.push(top);
@@ -200,6 +200,10 @@ public class ThemeParkADT {
 
     //Operation 4
     public void vipRgn(int r) {
+        if (r > totalRegions) {
+            System.out.println("The total number of VIP pass holders coming from Region " + r + " is " + 0);
+            return;
+        }
         for (int i = 0; i < regionArray.data.length; i++) {
             if (regionArray.data[i].region == r)
                 System.out.println("The total number of VIP pass holders coming from Region " + r + " is " + regionArray.data[i].vtype[0].num_visitors);
@@ -223,38 +227,44 @@ public class ThemeParkADT {
 
     //Operation 6
     public boolean checkVipLoc(String n1, String n2) {
-    	boolean flag,last=false;
-        visitorInfo v1 = null, v2 = null;
+        boolean flag;
+        visitorInfo v1 = null;
+        visitorInfo v2 = null;
+
         vips.findfirst();
-        
-        while (!last && (v1 == null || v2 == null)) {
-        	last = vips.last();
-        	visitorInfo v = vips.retrieve();
-            if (v.phone.equals(n1))
-                v1 = v;
-            else if (v.phone.equals(n2))
-                v2 = v;
+        visitorInfo v = vips.retrieve();
+
+        while ((v != null) && (v1 == null || v2 == null)) {
+
+            if (v.phone.equals(n1)) v1 = v;
+            else if (v.phone.equals(n2)) v2 = v;
+
             vips.findnext();
+            v = vips.retrieve();
         }
         if (v1 == null || v2 == null) {
-            if (v1 == null)
-                System.out.println("There is no visitor with number: " + n1 + ".");
-            if (v2 == null)
-                System.out.println("There is no visitor with number: " + n2 + ".");
-            flag = false;
-        } else if (v1.region != v2.region) {
+            if (v1 == null) {
+                System.out.println("There is no visitor with the number: " + n1 + " in the vip list");
+            }
+            if (v2 == null) {
+                System.out.println("There is no visitor with the number: " + n2 + " in the vip list");
+            }
+            return false;
+        }
+        else if (v1.region != v2.region) {
             System.out.println("Not in the same region.");
-            flag = false;
-        } else {
-        	Integer q =  v1.order.pop() , w = v2.order.pop();
-        	if ( q == w ) {
-        		flag = true;}
-        	else {
-        		flag = false ;}
-        v1.order.push(q); 
-        v2.order.push(w);
-          }
-        
+            return false;
+        }
+        else {
+            Integer q = v1.order.pop();
+            Integer w = v2.order.pop();
+
+            flag = Objects.equals(q, w);
+
+            v1.order.push(q);
+            v2.order.push(w);
+        }
+
         return flag;
     }
 
