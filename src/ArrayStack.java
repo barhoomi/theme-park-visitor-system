@@ -22,7 +22,10 @@ public class ArrayStack<T> {
 	}
 	
 	public T pop() {
-		return nodes[top--];
+		if(!empty()) {
+			return nodes[top--];
+		}
+		else return null;
 	}
 
 	@Override

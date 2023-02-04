@@ -22,7 +22,9 @@ public class LinkedList<T>{
 	current = head;
 	}
 	public void findnext () {
-		current = current.next;
+		if(current != null){
+			current = current.next;
+		}
 	}
 	public T retrieve () {
 		if(current!=null) {

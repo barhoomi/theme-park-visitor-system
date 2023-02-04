@@ -227,101 +227,103 @@ public class ThemeParkADT {
 
     //Operation 6
     public boolean checkVipLoc(String n1, String n2) {
+
         boolean flag;
-        visitorInfo v1 = null;
-        visitorInfo v2 = null;
 
-        vips.findfirst();
-        visitorInfo v = vips.retrieve();
+        visitorInfo v1 = findVisitorByPhoneNumber(n1, true);
+        visitorInfo v2 = findVisitorByPhoneNumber(n2, true);
 
-        while ((v != null) && (v1 == null || v2 == null)) {
 
-            if (v.phone.equals(n1)) v1 = v;
-            else if (v.phone.equals(n2)) v2 = v;
-
-            vips.findnext();
-            v = vips.retrieve();
-        }
-        if (v1 == null || v2 == null) {
-            if (v1 == null) {
-                System.out.println("There is no visitor with the number: " + n1 + " in the vip list");
-            }
-            if (v2 == null) {
-                System.out.println("There is no visitor with the number: " + n2 + " in the vip list");
-            }
+        if (v1 == null) {
+            System.out.println("There are no VIP visitors with the number: " + n1 + ".");
             return false;
         }
-        else if (v1.region != v2.region) {
-            System.out.println("Not in the same region.");
+        if (v2 == null) {
+            System.out.println("There are no VIP visitors with the number: " + n2 + ".");
             return false;
         }
-        else {
-            Integer q = v1.order.pop();
-            Integer w = v2.order.pop();
-
-            flag = Objects.equals(q, w);
-
-            v1.order.push(q);
-            v2.order.push(w);
+        if (v1.region != v2.region) {
+            System.out.println("The visitors are not in the same region.");
+            return false;
         }
 
-        return flag;
+        Integer q = v1.order.pop();
+        v1.order.push(q);
+
+        Integer w = v2.order.pop();
+        v2.order.push(w);
+
+        return Objects.equals(q, w);
+    }
+
+    private visitorInfo findVisitorByPhoneNumber(String n, boolean isVip) {
+
+        LinkedList<visitorInfo> list = isVip ? vips : visitors;
+
+        list.findfirst();
+        visitorInfo current = list.retrieve();
+
+        while ((current != null)) {
+
+            if (current.phone.equals(n)) {
+                if ((current.type == 1) == isVip) return current;
+                else return null;
+            }
+
+            list.findnext();
+            current = list.retrieve();
+        }
+
+        return null;
     }
 
     //Operation 7
     public boolean checkRegLoc(int r, String n1, String n2) {
-        visitorInfo v1 = null, v2 = null;
-        boolean flag = false;
-        visitors.findfirst();
-        while (!visitors.last() && (v1 == null || v2 == null)) {
-            visitorInfo v = visitors.retrieve();
-            if (v.phone.equals(n1))
-                v1 = v;
-            else if (v.phone.equals(n2))
-                v2 = v;
-            visitors.findnext();
 
+        visitorInfo v1 = findVisitorByPhoneNumber(n1, false);
+        visitorInfo v2 = findVisitorByPhoneNumber(n2, false);
+
+        if (v1 == null) {
+            System.out.println("There are no regular visitors with the number: " + n1 + ".");
+            return false;
         }
-        if (v1 == null || v2 == null) {
-            if (v1 == null) {
-                System.out.println("There is no visitor with number: " + n1 + ".");
-            }
-            if (v2 == null) {
-                System.out.println("There is no visitor with number: " + n2 + ".");
-            }
-            return flag = false;
+        if (v2 == null) {
+            System.out.println("There are no regular visitors with the number: " + n2 + ".");
+            return false;
         }
-        if (r != v1.region || r != v2.region) {
-            if (r != v1.region) {
-                System.out.println("The visitor with number: " + n1 + " is not from region " + r + ".");
-            }
-            if (r != v2.region) {
-                System.out.println("The visitor with number: " + n2 + " is not from region " + r + ".");
-            }
-            return flag = false;
+        if (r != v1.region) {
+            System.out.println("The visitor with number: " + n1 + " is not from region " + r + ".");
+            return false;
         }
-        flag = sameVisitOrder(v1, v2, flag);
-        return flag;
+        if (r != v2.region) {
+            System.out.println("The visitor with number: " + n2 + " is not from region " + r + ".");
+            return false;
+        }
+
+        return sameVisitOrder(v1, v2);
 
     }
 
-    private boolean sameVisitOrder(visitorInfo v1, visitorInfo v2, boolean flag) {
-        int top1 = 0;
-        int top2 = 0;
-        if (v1.order.empty())
-            return flag = true;
-        else {
-            top1 = v1.order.pop();
-            top2 = v2.order.pop();
-        }
+    private boolean sameVisitOrder(visitorInfo v1, visitorInfo v2) {
+
+        if (v1.order.empty() && v2.order.empty()) return true;
+
+        if(v1.order.empty()) return false;
+        if(v2.order.empty()) return false;
+
+        int top1 = v1.order.pop();
+        int top2 = v2.order.pop();
 
         if (top1 != top2) {
             System.out.println("Orders are not the same.");
-            flag = false;
-        } else if (flag != true)
-            flag = sameVisitOrder(v1, v2, flag);
+            return false;
+        }
+
+        boolean flag = sameVisitOrder(v1, v2);
+
         v1.order.push(top1);
         v2.order.push(top2);
+
         return flag;
     }
 
