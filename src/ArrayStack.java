@@ -27,15 +27,4 @@ public class ArrayStack<T> {
 		}
 		else return null;
 	}
-
-	@Override
-	public String toString() {
-		String output = "";
-		ArrayStack tempArrayStack = new ArrayStack(maxsize);
-		T tempNode;
-		for(int i = 0; i <= top; i++){
-			output += nodes[i];
-		}
-		return output;
-	}
 }
