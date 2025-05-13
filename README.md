@@ -36,3 +36,25 @@ javac *.java
 
 # Example execution (adjust Main class name and input file path as needed)
 java Main visitors.txt
+```
+
+The program's output will display the results of each of the implemented operations based on the data read from the input file.
+Input File Format
+
+The input text file is a comma-separated value file where each line represents a visitor's information in the following format:
+
+FirstName,LastName,Region,PassType,PhoneNumber,Kingdom1,Kingdom2,...
+
+    FirstName: String
+    LastName: String
+    Region: Integer (representing the region number)
+    PassType: Integer (1 for VIP, 0 for Regular)
+    PhoneNumber: String (10 digits)
+    Kingdom1,Kingdom2,...: A comma-separated list of integers representing the order in which the visitor entered the kingdoms.
+
+## Project Phases
+
+This project was developed in two phases:
+
+    Phase 1: Focused on the design of the custom ADT, including graphical representation, detailed description and justification, specification of operations, and time complexity analysis (Big O notation).
+    Phase 2: Involved the implementation of the designed ADT and all specified operations in Java, reading data from an input file, and demonstrating the functionality.
