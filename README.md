@@ -27,16 +27,28 @@ In strict adherence to the course requirements, this project implements custom d
 ## How to Run
 
 1.  Ensure you have a Java Development Kit (JDK) installed.
-2.  Compile the Java source files.
-3.  Run the `Main` class. The program will read visitor data from a specified input text file (as per project requirements) and execute the operations.
+2.  Navigate to the root directory of the project in your terminal or command prompt (the directory containing `src`, `.idea`, `Project.iml`, etc.).
+3.  Compile the Java source files located in the `src` directory.
 
-```bash
-# Example compilation (adjust path as needed)
-javac *.java
+    ```bash
+    javac src/*.java
+    ```
 
-# Example execution (adjust Main class name and input file path as needed)
-java Main visitors.txt
-```
+4.  Run the main class (`testing`) which is located within the `src` directory (implicitly in a package named `src` if compiled this way). The program is expected to read visitor data from `testInput.txt`. Make sure `testInput.txt` is accessible from the directory where you run the command (either in the root or specified by its path).
+
+    ```bash
+    java -cp src testing testInput.txt
+    ```
+    * `-cp src` adds the `src` directory to the classpath, allowing the Java runtime to find the compiled `.class` files.
+    * `testing` is the name of the class containing the `main` method.
+    * `testInput.txt` is passed as a command-line argument to your program. Your `main` method should be set up to accept `String[] args` and use `args[0]` to get the filename.
+
+The program's output will display the results of each of the implemented operations based on the data read from `testInput.txt`.
+
+## Input File Format
+
+The input text file (`testInput.txt` in this case) is a comma-separated value file...
+*(...the rest of this section remains the same)*
 
 The program's output will display the results of each of the implemented operations based on the data read from the input file.
 Input File Format
@@ -58,3 +70,10 @@ This project was developed in two phases:
 
     Phase 1: Focused on the design of the custom ADT, including graphical representation, detailed description and justification, specification of operations, and time complexity analysis (Big O notation).
     Phase 2: Involved the implementation of the designed ADT and all specified operations in Java, reading data from an input file, and demonstrating the functionality.
+
+## Team Members
+
+* [barhoomi](https://github.com/barhoomi)
+* [d7mee-00](https://github.com/d7mee-00)
+* [AK7Amin](https://github.com/AK7Amin)
+* [YS-AJ](https://github.com/YS-AJ)
